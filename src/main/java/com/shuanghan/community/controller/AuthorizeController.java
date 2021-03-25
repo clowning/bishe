@@ -2,6 +2,7 @@ package com.shuanghan.community.controller;
 
 
 import com.shuanghan.community.dto.AccessTokenDTO;
+import com.shuanghan.community.dto.GithubUser;
 import com.shuanghan.community.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,12 +20,15 @@ public class AuthorizeController {
                             @RequestParam(name = "state") String state){
 
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.getClient_id("1969adb2b21d63f47ad7");
-        accessTokenDTO.getClient_secret("7215766bfea1b4bf1a7b8a83101de73208e24449");
-        accessTokenDTO.getRedirect_uri("http://localhost:8080/callback");
+        accessTokenDTO.setClient_id("1969adb2b21d63f47ad7");
+        accessTokenDTO.setClient_secret("7215766bfea1b4bf1a7b8a83101de73208e24449");
+        accessTokenDTO.setRedirect_uri("http://localhost:8080/callback");
         accessTokenDTO.setCode(code);
         accessTokenDTO.setState(state);
-        githubProvider.getAccessToken(accessTokenDTO);
+        String accessToken = githubProvider.getAccessToken(accessTokenDTO);
+        GithubUser user = githubProvider.getUser(accessToken);
+        System.out.println(user.getName());
+
 
         return "index";
     }
