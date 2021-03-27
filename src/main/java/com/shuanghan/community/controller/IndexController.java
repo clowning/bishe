@@ -1,7 +1,11 @@
 package com.shuanghan.community.controller;
 
+import com.shuanghan.community.dto.QuestionDTO;
+import com.shuanghan.community.mapper.QuestionMapper;
 import com.shuanghan.community.mapper.UserMapper;
+import com.shuanghan.community.model.Question;
 import com.shuanghan.community.model.User;
+import com.shuanghan.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,15 +14,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class IndexController {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping("/")
-    public String hello(HttpServletRequest request){
+    public String hello(HttpServletRequest request,
+                        Model model){
         Cookie[] cookies = request.getCookies();
         for(Cookie cookie :cookies){
             if (cookie.getName().equals("token")){
@@ -31,6 +39,8 @@ public class IndexController {
             }
         }
 
+        List<QuestionDTO> questionList = questionService.list();
+        model.addAttribute("question",questionList);
         return "index";
 
     }
