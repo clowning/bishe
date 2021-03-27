@@ -1,5 +1,6 @@
 package com.shuanghan.community.controller;
 
+import com.shuanghan.community.dto.PaginationDTO;
 import com.shuanghan.community.dto.QuestionDTO;
 import com.shuanghan.community.mapper.QuestionMapper;
 import com.shuanghan.community.mapper.UserMapper;
@@ -26,7 +27,10 @@ public class IndexController {
 
     @GetMapping("/")
     public String hello(HttpServletRequest request,
-                        Model model){
+                        Model model,
+                        @RequestParam(name = "page" ,defaultValue = "1") Integer page,
+                        @RequestParam(name = "size" ,defaultValue = "5") Integer size
+                        ){
         Cookie[] cookies = request.getCookies();
         for(Cookie cookie :cookies){
             if (cookie.getName().equals("token")){
@@ -39,8 +43,8 @@ public class IndexController {
             }
         }
 
-        List<QuestionDTO> questionList = questionService.list();
-        model.addAttribute("question",questionList);
+        PaginationDTO pagination = questionService.list(page,size);
+        model.addAttribute("pagination",pagination);
         return "index";
 
     }
