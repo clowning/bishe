@@ -3,10 +3,7 @@ package com.shuanghan.community.mapper;
 
 import com.shuanghan.community.dto.QuestionDTO;
 import com.shuanghan.community.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 import sun.awt.SunHints;
 
@@ -31,6 +28,9 @@ public interface QuestionMapper {
     Integer countByUserId(@Param(value = "userId") Integer userId);
 
     @Select("select * from question where id = #{id}")
-    Question getById(@Param(value = "id") String id);
+    Question getById(@Param(value = "id") Integer id);
+
+    @Update("update question set title = #{title}, description = #{description}, gmt_modified=#{gmtModified}, tag=#{tag} where id = #{id}")
+    void update(Question question);
 }
 
